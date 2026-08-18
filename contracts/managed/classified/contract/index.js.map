@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "file": "index.js",
+  "sourceRoot": "../../../../",
+  "sources": ["contracts/classified.compact", "compiler/standard-library.compact"],
+  "names": [],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;EAAA;;;;;;;;;;;;;MAqDA,AAAA,aAYC;;;;;cAXC,cAA8B;cAC9B,SAAiB;;;;;;;;;;;;;;;;;;yCADjB,cAA8B,+BAC9B,SAAiB;;;;;;;;;+CADjB,cAA8B;+CAC9B,SAAiB;;;OAUlB;MAUD,AAAA,iBAQC;;;;;cAPC,cAA8B;cAC9B,oBAA6B;;;;;;;;;;;;;;;;;;yCAD7B,cAA8B,+BAC9B,oBAA6B;;;;;;;;;mDAD7B,cAA8B;mDAC9B,oBAA6B;;;OAM9B;;;;;;;;;;GAAC;EAnFF;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;IAgCA;;;;;;;;;;yEAA6D;;;;;;;GAmD3D;ECnFF,AAAA,kBAAA;oEAAA;;;ED0CA,AAAA,mBAAsC;;0DAAtC,gBAAsC;;;;;;;;;;;;;;GAAA;EAWtC,AAAA,gBAYC,4BAXC,cAA8B,EAC9B,SAAiB;UAEX,QAA2B;UAE3B,aAGJ,2BAFA,QAAM;;uFACL,SAAO;;IAGV;;;;;;;;;;2HAA6B,cAAY;;;2HAAY,aAAW;;;wEAApD;;GACb;EAUD,AAAA,oBAQC;;uBAPC,cAA8B;uBAC9B,oBAA6B;;gCAEzB;;;;;;;;;;;uJAA6B,cAAY;;;;qGAA7B;;mDACE;;;;;;;;;;;;;;8IAA6B,cAAY;;;wHAA7B;2BAAmC,oBAAkB;;;;GAGpF;;;;;;;;;;;;;;;;;;;;IAnDD;;;;;uCAAA;;;;;;;;;;;;;;;;4GAA6D;;;;;;uCAA7D;;;;;;;;;;;;4GAA6D;;;;;;;uCAA7D;;;;;;;;;;;;;;;4GAA6D;;;;;;;uCAA7D;;;;;;;;;;;;;;;;;4GAA6D;;;;;;;;;KAAA;;;;;;;;;;;;"
+}

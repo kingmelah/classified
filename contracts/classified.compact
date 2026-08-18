@@ -1,0 +1,84 @@
+pragma language_version >= 0.23;
+
+import CompactStandardLibrary;
+
+// ============================================================
+// Classified - Simple On-Chain Attestation
+// Author: Midas (@iamkingmelah)
+// GitHub: github.com/kingmelah/classified
+// ============================================================
+// A minimal attestation mechanism: Classified holds a secret
+// witness and uses it to vouch for a piece of data (e.g. a
+// balance) by producing a tamper-evident commitment. Other
+// dApps (like ProveIt) can later verify that commitment as a
+// trusted witness, instead of relying on raw self-reported data.
+//
+// This does NOT verify a real external signature (bank,
+// employer, etc.) — Compact does not currently expose a
+// confirmed, safe primitive for verifying arbitrary external
+// signatures inside a circuit. This is the same witness +
+// commitment pattern ProveIt already uses for its own balance
+// commitment, applied one layer earlier: proving "someone who
+// knows Classified's secret vouched for this exact value."
+// ============================================================
+
+
+// ============================================================
+// CHAPTER 1: ATTESTATION DATA STRUCTURE
+// Purpose: Public record of attestations, keyed by the address
+// being attested for. Multi-user from the start, matching
+// ProveIt's own Map-based design.
+// ============================================================
+
+export ledger attestations: Map<Opaque<"string">, Bytes<32>>;  // Per-user attestation commitment
+
+
+// ============================================================
+// CHAPTER 2: WITNESS
+// Purpose: Classified's own secret — never stored on-chain,
+// never revealed. Knowledge of this secret is what makes an
+// attestation genuine rather than something anyone could forge.
+// ============================================================
+
+witness classifiedSecret(): Bytes<32>;
+
+
+// ============================================================
+// CHAPTER 3: ATTEST CIRCUIT
+// Purpose: Vouch for a specific balance belonging to a specific
+// address. Produces a commitment that ties Classified's secret
+// to this exact value — verifiable later, without ever
+// revealing the secret itself.
+// ============================================================
+
+export circuit attestBalance(
+  ownerAddress: Opaque<"string">,   // Public — whose balance this attests to
+  balance: Uint<64>                 // Public — the value being attested (kept simple for v1; a real version might keep this private too)
+): [] {
+  const secret = classifiedSecret();
+
+  const attestation = persistentHash<Vector<2, Bytes<32>>>([
+    secret,
+    (balance as Field) as Bytes<32>
+  ]);
+
+  attestations.insert(disclose(ownerAddress), disclose(attestation));
+}
+
+
+// ============================================================
+// CHAPTER 4: VERIFY CIRCUIT
+// Purpose: Public-facing check — does an attestation exist for
+// this address, and does it match an expected commitment value?
+// This is what ProveIt or any other dApp would call.
+// ============================================================
+
+export circuit verifyAttestation(
+  ownerAddress: Opaque<"string">,
+  expectedCommitment: Bytes<32>
+): Boolean {
+  if (attestations.member(disclose(ownerAddress))) {
+    return disclose(attestations.lookup(disclose(ownerAddress)) == expectedCommitment);
+  }
+  return false;
+}
