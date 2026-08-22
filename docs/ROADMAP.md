@@ -4,7 +4,7 @@
 
 ## Phase 1 — Attestation Primitive (current)
 
-**Theme:** Prove that a witness-secret + commitment mechanism can vouch for a piece of data, closing part of ProveIt's Finding #5 gap — without needing genuine external institutional signatures, which Compact does not currently support safely.
+**Theme:** Prove that a witness-secret + commitment mechanism can vouch for a piece of data, closing part of ProveIt's own Security Audit, Finding #5, just now one layer removed. gap — without needing genuine external institutional signatures, which Compact does not currently support safely.
 
 **Status:**
 
@@ -42,9 +42,17 @@
 
 ## Phase 3 — ProveIt Integration
 
-**Theme:** Close the loop — have ProveIt actually consume a Classified attestation as a witness input, instead of a raw self-reported number, directly addressing Security Audit Finding #5 in practice, not just in design.
+**Theme:** Close the loop — have ProveIt actually consume a Classified attestation as a witness input, instead of a raw self-reported number, directly addressing ProveIt's Security Audit Finding #5 in practice, not just in design.
 
 **Status:** Not started. No contract-to-contract calls are supported in Compact, so this is a TypeScript/application-layer integration (Classified produces a hash → application passes it into ProveIt's witness), not an on-chain call between the two contracts.
+
+**Design direction — identity-bound double commitment:** ProveIt's `commitCredential` currently takes a raw balance and hashes it internally. Under this integration, it would instead treat Classified's already-produced attestation hash as its witness, then combine that hash with the owner's public key before storing the final commitment. This prevents a genuine, valid Classified attestation from being reused by anyone other than the identity it was actually issued to.
+
+**What this achieves beyond Finding #5 alone:** Classified already solves "is the underlying data real, not self-reported." Binding the attestation to the owner's public key adds a second, distinct property — **non-transferability**. This is not extra untraceability (a single secure hash already provides that) — it specifically prevents attestation theft or reuse across identities.
+
+**Open implementation questions:**
+- How the TypeScript layer actually passes Classified's hash into ProveIt's witness function at proof-generation time — mechanism not yet built
+- Whether the owner identity should reuse ProveIt's existing `Opaque<"string">` address type or a raw `Bytes<32>` key, and how that reconciles with the existing multi-user Map-keying scheme.
 
 ---
 
